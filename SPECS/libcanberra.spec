@@ -1,9 +1,11 @@
 Name: libcanberra
 Version: 0.30
-Release: 26%{?dist}
+Release: 27%{?dist}
 Summary: Portable Sound Event Library
 Source0: http://0pointer.de/lennart/projects/libcanberra/libcanberra-%{version}.tar.xz
 Patch0: 0001-gtk-Don-t-assume-all-GdkDisplays-are-GdkX11Displays-.patch
+Patch1: add-quiet-option.patch
+Patch2: 0001-desktop-add-q-option-to-suppress-errors.patch
 License: LGPLv2+
 Url: http://git.0pointer.de/?p=libcanberra.git;a=summary
 BuildRequires: gcc
@@ -70,7 +72,9 @@ Development Files for libcanberra Client Development
 
 %prep
 %setup -q
-%patch0 -p1 
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
 %configure --disable-static --enable-pulse --enable-alsa --enable-null --disable-oss --with-builtin=dso --with-systemdsystemunitdir=/usr/lib/systemd/system
@@ -134,6 +138,10 @@ rm $RPM_BUILD_ROOT%{_docdir}/libcanberra/README
 %{_datadir}/vala/vapi/libcanberra.vapi
 
 %changelog
+* Thu Jul 13 2023 Wim Taymans <wtaymans@redhat.com> - 0.30-27
+- Add -q option to disable warnings.
+  Resolves: rhbz#2222172
+
 * Mon Aug 09 2021 Mohan Boddu <mboddu@redhat.com> - 0.30-26
 - Rebuilt for IMA sigs, glibc 2.34, aarch64 flags
   Related: rhbz#1991688
